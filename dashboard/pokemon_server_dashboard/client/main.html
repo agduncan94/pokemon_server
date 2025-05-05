@@ -1,0 +1,34 @@
+<head>
+  <title>Server Dashboard</title>
+</head>
+<body>
+  {{> serverStats}}
+</body>
+
+<template name="serverStats">
+  {{#if serverStats}}
+  {{jsonPrint serverStats}}
+
+  <h2>Users</h2>
+  <ul>
+    {{#each serverStats.users}}
+      <li>
+        <strong>{{name}}</strong>: 
+        CPU Usage: {{cpuUsage}}%, 
+        Memory Usage: {{memoryUsage}}%, 
+        GPU Memory Usage: {{gpuMemoryUsage}} MiB
+      </li>
+    {{/each}}
+  
+    <h2>Global Server Usage</h2>
+    <p>CPU Usage: {{serverStats.globalUsage.cpuUsage}}%</p>
+    <p>Memory Usage: {{serverStats.globalUsage.memoryUsage}}%</p>
+    <p>Disk Usage: {{serverStats.globalUsage.diskUsage}}%</p>
+    <p>Network Usage: {{serverStats.globalUsage.networkUsage}}%</p>
+    <p>GPU Usage: {{serverStats.globalUsage.gpuUsage}}%</p>
+  </ul>
+
+  {{else}}
+    <p>Loading server stats...</p>
+  {{/if}}
+</template>
