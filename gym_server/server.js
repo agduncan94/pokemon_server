@@ -4,24 +4,34 @@ const app = express();
 const port = 4000;
 const serverErrorStatus = 500;
 function getUserNamesFromHome() {
-  return ["Ash", "Misty"]
+  return ["root", "Misty"]
 }
-function getTopOutputs() {
+function getTopOutputs(userNames) {
+  
   const globalMemoryUsage = 0;
   const globalCpuUsage = 0;
   const userCpuNMemUsage = {}
-  for ({userName, cpuUsage, memUsage} of [{
-    userName: "Ash",
-    cpuUsage: 0,
-    memUsage: 0,
-  },
-  {
-    userName: "Misty",
-    cpuUsage: 0,
-    memUsage: 0,
-  }]) {
-    userCpuNMemUsage[userName] = {cpuUsage: cpuUsage, memUsage: memUsage}
-  }
+
+  const cmd = `ps -eo user,%cpu,rss --no-headers`;
+  const output = execSync(cmd, { encoding: 'utf-8' });
+  output.trim().split('\n').forEach(line => {
+    const [user, cpuStr, memStr] = line.trim().split(/\s+/, 3);
+    if (!userNames.find(user_ => user_ === user)) {
+      return
+    }
+    const cpu = parseFloat(cpuStr);
+    const mem = parseInt(memStr) * 1024; // rss in KB → bytes
+
+    globalCpuUsage += cpu;
+    globalMemoryUsage += mem;
+
+    if (!userCpuNMemUsage[user]) {
+      userCpuNMemUsage[user] = { cpuUsage: 0, memUsage: 0 };
+    }
+
+    userCpuNMemUsage[user].cpuUsage += cpu;
+    userCpuNMemUsage[user].memUsage += mem;
+  });
   return { globalMemoryUsage, globalCpuUsage, userCpuNMemUsage }
 }
 function getNvidiaSmiOutputs() {
@@ -47,13 +57,13 @@ function getNetworkUsage() {
 }
 app.get('/api/stats', (req, res) => {
   try {
-    const userNamesFromHome = getUserNamesFromHome()
-    const { globalMemoryUsage, globalCpuUsage, userCpuNMemUsage } = getTopOutputs()
+    const userNames = getUserNamesFromHome()
+    const { globalMemoryUsage, globalCpuUsage, userCpuNMemUsage } = getTopOutputs(userNames)
     const { globalGpuUsage, userGpuUsage } = getNvidiaSmiOutputs()
     const globalNetworkUsage = getNetworkUsage()
     const globalDiskUsage = getDiskUsage()
     // Create users array
-    users = userNamesFromHome.map(name => ({
+    users = userNames.map(name => ({
       name: name,
       cpuUsage: userCpuNMemUsage[name].cpuUsage,
       memUsage: userCpuNMemUsage[name].memUsage,
