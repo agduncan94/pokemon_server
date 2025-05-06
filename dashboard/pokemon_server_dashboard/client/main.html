@@ -101,9 +101,26 @@
         </div>
         {{/each}}
       </div>
+
+      {{#each serverStats.users}}
+      <span>{{name}}</span>
+      <div class="progress-bar-container">
+        <label for="progressBar">CPU Usage:{{cpuUsage}}%</label>
+        <div class="{{getCpuClass cpuUsage}}"></div>
+      </div>
+      <div class="progress-bar-container">
+        <label for="progressBar">Memory Usage:{{memoryUsage}}%</label>
+        <div class="{{getCpuClass memoryUsage}}"></div>
+      </div>
+      <div class="progress-bar-container">
+        <label for="progressBar">GPU Memory Usage:{{gpuMemoryUsage}}%</label>
+        <div class="{{getCpuClass gpuMemoryUsage}}"></div>
+      </div>
+      {{/each}}
     </div>
+  </div>
 
   {{else}}
-    <p>Loading server stats...</p>
+  <p>Loading server stats...</p>
   {{/if}}
 </template>
