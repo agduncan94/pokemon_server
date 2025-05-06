@@ -1,66 +1,82 @@
 const express = require('express');
-const { exec } = require('child_process');
+const { execSync } = require('child_process');
 const app = express();
 const port = 4000;
-
+const serverErrorStatus = 500;
+function getUserNamesFromHome() {
+  return ["Ash", "Misty"]
+}
+function getTopOutputs() {
+  const globalMemoryUsage = 0;
+  const globalCpuUsage = 0;
+  const userCpuNMemUsage = {}
+  for ({userName, cpuUsage, memUsage} of [{
+    userName: "Ash",
+    cpuUsage: 0,
+    memUsage: 0,
+  },
+  {
+    userName: "Misty",
+    cpuUsage: 0,
+    memUsage: 0,
+  }]) {
+    userCpuNMemUsage[userName] = {cpuUsage: cpuUsage, memUsage: memUsage}
+  }
+  return { globalMemoryUsage, globalCpuUsage, userCpuNMemUsage }
+}
+function getNvidiaSmiOutputs() {
+  const globalGpuUsage = 0;
+  const userGpuUsage = {}
+  for ({userName, gpuUsage} of [{
+    userName: "Ash",
+    gpuUsage: 0,
+  },
+  {
+    userName: "Misty",
+    gpuUsage: 0,
+  }]) {
+    userGpuUsage[userName] = gpuUsage
+  }
+  return { globalGpuUsage, userGpuUsage }
+}
+function getDiskUsage() {
+  return 0
+}
+function getNetworkUsage() {
+  return 0
+}
 app.get('/api/stats', (req, res) => {
-
-
-  // Execute the 'top' command to get server stats
-  exec('top -b -n 1 | grep "MiB Mem :"', (err, stdout, stderr) => {
-    if (err) {
-      console.error(`Error executing top command: ${stderr}`);
-      return res.status(500).json({ error: 'Failed to retrieve server stats' });
-    }
-
-    // Parse memory usage from the 'top' command output
-    const memoryStats = stdout.match(/([\d.]+)\s+total,\s+([\d.]+)\s+free,\s+([\d.]+)\s+used,\s+([\d.]+)\s+buff\/cache/);
-    console.log(stdout);
-    const totalMemory = parseInt(memoryStats[1], 10);
-    const usedMemory = parseInt(memoryStats[2], 10);
-    const freeMemory = parseInt(memoryStats[3], 10);
-
-    // Create user objects that store the stats
-    const user1 = {
-      name: "Ash",
-      cpuUsage: 10,
-      memoryUsage: 20,
-      gpuMemoryUsage: 30
-    };
-
-    const user2 = {
-      name: "Misty",
-      cpuUsage: 15,
-      memoryUsage: 25,
-      gpuMemoryUsage: 35
-    };
-
-    const user3 = {
-      name: "Brock",
-      cpuUsage: 20,
-      memoryUsage: 30,
-      gpuMemoryUsage: 40
-    };
-
+  try {
+    const userNamesFromHome = getUserNamesFromHome()
+    const { globalMemoryUsage, globalCpuUsage, userCpuNMemUsage } = getTopOutputs()
+    const { globalGpuUsage, userGpuUsage } = getNvidiaSmiOutputs()
+    const globalNetworkUsage = getNetworkUsage()
+    const globalDiskUsage = getDiskUsage()
     // Create users array
-    users = [user1, user2, user3];
+    users = userNamesFromHome.map(name => ({
+      name: name,
+      cpuUsage: userCpuNMemUsage[name].cpuUsage,
+      memUsage: userCpuNMemUsage[name].memUsage,
+      gpuUsage: userGpuUsage[name].gpuUsage
+    }))
 
     // Create global usage object
-    globalUsage = {
-      cpuUsage: 50,
-      memoryUsage: usedMemory,
-      freeMemory: freeMemory,
-      totalMemory: totalMemory,
-      diskUsage: 80,
-      networkUsage: 60,
-      gpuUsage: 80
+    const globalUsage = {
+      cpuUsage: globalCpuUsage,
+      memoryUsage: globalMemoryUsage,
+      diskUsage: globalDiskUsage,
+      networkUsage: globalNetworkUsage,
+      gpuUsage: globalGpuUsage 
     };
 
     res.json({
       users: users,
       globalUsage: globalUsage
     });
-  });
+  } catch (err) {
+    console.error(err);
+    return res.status(serverErrorStatus).json({ error: 'Failed to retrieve server stats' });
+  }
 });
 
 
