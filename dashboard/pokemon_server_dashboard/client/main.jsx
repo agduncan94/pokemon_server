@@ -12,7 +12,6 @@ Template.serverStats.onCreated(function() {
       if (!error) {
         this.serverStats.set(result);
         const randomIndex = Math.floor(Math.random() * result.users.length);
-
         this.currentUser.set(result.users[randomIndex])
       }
     });
@@ -41,6 +40,9 @@ Template.serverStats.helpers({
   },
   getPokemonUser(name) {
     return './images/pokemon_users/' + name + '.png'
+  },
+  getBackground(name) {
+    return './images/backgrounds/' + name + '_Background.png'
   }
 
 

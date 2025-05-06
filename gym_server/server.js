@@ -36,7 +36,7 @@ app.get('/api/stats', (req, res) => {
     diskUsage: 80,
     networkUsage: 60,
     gpuUsage: 80,
-    name: 'Valrhona'
+    name: 'Meiji'
   };
 
   res.json({
