@@ -6,21 +6,21 @@ const port = 4000;
 app.get('/api/stats', (req, res) => {
   // Create user objects that store the stats
   const user1 = {
-    name: "Ash",
+    name: "Andrew",
     cpuUsage: 10,
     memoryUsage: 20,
     gpuMemoryUsage: 30
   };
 
   const user2 = {
-    name: "Misty",
+    name: "Alex",
     cpuUsage: 15,
     memoryUsage: 25,
     gpuMemoryUsage: 35
   };
 
   const user3 = {
-    name: "Brock",
+    name: "Denise",
     cpuUsage: 20,
     memoryUsage: 30,
     gpuMemoryUsage: 40
@@ -35,7 +35,8 @@ app.get('/api/stats', (req, res) => {
     memoryUsage: 70,
     diskUsage: 80,
     networkUsage: 60,
-    gpuUsage: 80
+    gpuUsage: 80,
+    name: 'Valrhona'
   };
 
   res.json({

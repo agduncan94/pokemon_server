@@ -2,5 +2,12 @@
 
 body {
   padding: 10px;
-  font-family: sans-serif;
+  font-family: Pokemon GB;
+}
+
+h1 {
+  font-size: 40pt
+}
+h2 {
+  font-size: 24pt
 }
