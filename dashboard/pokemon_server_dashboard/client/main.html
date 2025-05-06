@@ -1,6 +1,10 @@
 <head>
   <title>Server Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../styles/css-pokemon-gameboy.css">
 </head>
+
 <body>
   {{> serverStats}}
 </body>
@@ -10,14 +14,22 @@
   {{jsonPrint serverStats}}
 
   <h2>Users</h2>
-  <ul>
     {{#each serverStats.users}}
-      <li>
-        <strong>{{name}}</strong>: 
-        CPU Usage: {{cpuUsage}}%, 
-        Memory Usage: {{memoryUsage}}%, 
-        GPU Memory Usage: {{gpuMemoryUsage}} MiB
-      </li>
+      <div class="framed exclude-border">
+        <span>Placeholder</span>
+        <div class="progress-bar-container">
+          <label for="progressBar">CPU Usage:{{cpuUsage}}%</label>
+          <div class="progress-bar p51" id="progressBar"></div>
+        </div>
+        <div class="progress-bar-container">
+          <label for="progressBar">Memory Usage:{{memoryUsage}}%</label>
+          <div class="progress-bar p51" id="progressBar"></div>
+        </div>
+        <div class="progress-bar-container">
+          <label for="progressBar">GPU Memory Usage:{{gpuMemoryUsage}}%</label>
+          <div class="progress-bar p51" id="progressBar"></div>
+        </div>
+      </div>
     {{/each}}
   
     <h2>Global Server Usage</h2>
@@ -26,7 +38,7 @@
     <p>Disk Usage: {{serverStats.globalUsage.diskUsage}}%</p>
     <p>Network Usage: {{serverStats.globalUsage.networkUsage}}%</p>
     <p>GPU Usage: {{serverStats.globalUsage.gpuUsage}}%</p>
-  </ul>
+  
 
   {{else}}
     <p>Loading server stats...</p>

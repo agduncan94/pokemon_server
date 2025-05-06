@@ -9,9 +9,6 @@ Template.serverStats.onCreated(function() {
   const fetchServerStats = () => {
     Meteor.call('getServerStats', (error, result) => {
       if (!error) {
-        console.log('Server stats:', result);
-        // print cpuUsage
-        console.log('CPU Usage:', result.name);
         this.serverStats.set(result);
       }
     });
