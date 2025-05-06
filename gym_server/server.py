@@ -4,20 +4,30 @@ import subprocess
 import json
 
 HOST = '127.0.0.1'  # localhost
-PORT = 65432        # arbitrary non-privileged port
+PORT = 65431        # arbitrary non-privileged port
+
+def _():
+    ...
 
 def get_disk_usage():
-    result = subprocess.run(['df', '-h'], capture_output=True, text=True)
-    lines = result.stdout.strip().split('\n')[1:]  # skip header
-    usage_info = []
-
+    lines = subprocess.run(['df','--si'], capture_output=True, text=True).stdout.splitlines()
+    tot=0
+    usage=0
     for line in lines:
-        parts = line.split()
-        if len(parts) >= 6:
-            partition, size, used = parts[0], parts[1], parts[2]
-            usage_info.append({'partition': partition, 'total': size, 'used': used})
-    return usage_info
-
+        vals = line.split()
+        partition_of_interest=False
+        for v in vals:
+            if 'T' in v: 
+                partition_of_interest=True
+        if partition_of_interest:
+            #print(vals[1],vals[4])
+            tot=tot+float(vals[1][:-1])
+            usage=usage+ 0.01*float(vals[4][:-1])*float(vals[1][:-1])
+    
+    return {
+        "usedDiskSize": usage,
+        "totalDiskSize": tot
+    }
 def handle_client(conn, addr):
     print(f"[+] Connected by {addr}")
     with conn:
