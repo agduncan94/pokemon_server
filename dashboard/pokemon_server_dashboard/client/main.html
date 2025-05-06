@@ -5,41 +5,42 @@
   <link rel="stylesheet" href="../styles/css-pokemon-gameboy.css">
 </head>
 
-<body>
+<body style="font-family:Pokemon GB">
   {{> serverStats}}
 </body>
 
 <template name="serverStats">
   {{#if serverStats}}
-  {{jsonPrint serverStats}}
 
-  <h2>Users</h2>
+  <div class="framed exclude-border">
+    <span>{{randomUser.name}}</span>
+  </div>
+
+  <h1>Servers</h1>
+  <div id="main" class="grid grid-cols-2 gap-1 justify-evenly">
       <div class="framed exclude-border">
+
+        <div>
+          {{jsonPrint serverStats.globalUsage}}
+        </div>
         
-    {{#each serverStats.users}}
+      {{#each serverStats.users}}
         <span>{{name}}</span>
         <div class="progress-bar-container">
           <label for="progressBar">CPU Usage:{{cpuUsage}}%</label>
-          <div class="progress-bar" id="progressBar"></div>
+          <div class="{{getCpuClass cpuUsage}}"></div>
         </div>
         <div class="progress-bar-container">
           <label for="progressBar">Memory Usage:{{memoryUsage}}%</label>
-          <div class="progress-bar" id="progressBar"></div>
+          <div class="{{getCpuClass memoryUsage}}"></div>
         </div>
         <div class="progress-bar-container">
           <label for="progressBar">GPU Memory Usage:{{gpuMemoryUsage}}%</label>
-          <div class="{{getCpuClass cpuUsage}}" id="progressBar"></div>
+          <div class="{{getCpuClass gpuMemoryUsage}}"></div>
         </div>
         {{/each}}
       </div>
-  
-    <h2>Global Server Usage</h2>
-    <p>CPU Usage: {{serverStats.globalUsage.cpuUsage}}%</p>
-    <p>Memory Usage: {{serverStats.globalUsage.memoryUsage}}%</p>
-    <p>Disk Usage: {{serverStats.globalUsage.diskUsage}}%</p>
-    <p>Network Usage: {{serverStats.globalUsage.networkUsage}}%</p>
-    <p>GPU Usage: {{serverStats.globalUsage.gpuUsage}}%</p>
-  
+    </div>
 
   {{else}}
     <p>Loading server stats...</p>

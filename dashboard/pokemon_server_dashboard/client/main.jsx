@@ -5,11 +5,13 @@ import './main.html';
 
 Template.serverStats.onCreated(function() {
   this.serverStats = new ReactiveVar(null);
+  this.randomUser = new ReactiveVar(null);
 
   const fetchServerStats = () => {
     Meteor.call('getServerStats', (error, result) => {
       if (!error) {
         this.serverStats.set(result);
+        this.randomUser.set(result.users[1])
       }
     });
   };
@@ -21,6 +23,9 @@ Template.serverStats.onCreated(function() {
 Template.serverStats.helpers({
   serverStats() {
     return Template.instance().serverStats.get();
+  },
+  randomUser() {
+    return Template.instance().randomUser.get();
   },
   jsonPrint(jsonObject) { // with Latest Javascript ECMAScript 2015+
     return JSON.stringify(jsonObject);
