@@ -15,7 +15,7 @@ Template.serverStats.onCreated(function() {
   };
 
   fetchServerStats();
-  this.interval = setInterval(fetchServerStats, 5000);
+  this.interval = setInterval(fetchServerStats, 20000);
 });
 
 Template.serverStats.helpers({
@@ -25,4 +25,10 @@ Template.serverStats.helpers({
   jsonPrint(jsonObject) { // with Latest Javascript ECMAScript 2015+
     return JSON.stringify(jsonObject);
   },
+  getCpuClass(cpuUsage) {
+    const percentage = parseInt(cpuUsage, 10); // Convert to integer
+    return `progress-bar p${percentage}`; // Creates class like "p40"
+  }
+
+
 });

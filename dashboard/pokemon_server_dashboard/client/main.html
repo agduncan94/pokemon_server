@@ -14,23 +14,24 @@
   {{jsonPrint serverStats}}
 
   <h2>Users</h2>
-    {{#each serverStats.users}}
       <div class="framed exclude-border">
-        <span>Placeholder</span>
+        
+    {{#each serverStats.users}}
+        <span>{{name}}</span>
         <div class="progress-bar-container">
           <label for="progressBar">CPU Usage:{{cpuUsage}}%</label>
-          <div class="progress-bar p51" id="progressBar"></div>
+          <div class="progress-bar" id="progressBar"></div>
         </div>
         <div class="progress-bar-container">
           <label for="progressBar">Memory Usage:{{memoryUsage}}%</label>
-          <div class="progress-bar p51" id="progressBar"></div>
+          <div class="progress-bar" id="progressBar"></div>
         </div>
         <div class="progress-bar-container">
           <label for="progressBar">GPU Memory Usage:{{gpuMemoryUsage}}%</label>
-          <div class="progress-bar p51" id="progressBar"></div>
+          <div class="{{getCpuClass cpuUsage}}" id="progressBar"></div>
         </div>
+        {{/each}}
       </div>
-    {{/each}}
   
     <h2>Global Server Usage</h2>
     <p>CPU Usage: {{serverStats.globalUsage.cpuUsage}}%</p>
