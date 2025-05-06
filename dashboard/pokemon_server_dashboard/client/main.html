@@ -14,34 +14,36 @@
   {{jsonPrint serverStats}}
 
   <h2>Users</h2>
-      <div class="framed exclude-border">
-        
+  <div class="framed exclude-border">
+
     {{#each serverStats.users}}
-        <span>{{name}}</span>
-        <div class="progress-bar-container">
-          <label for="progressBar">CPU Usage:{{cpuUsage}}%</label>
-          <div class="progress-bar" id="progressBar"></div>
-        </div>
-        <div class="progress-bar-container">
-          <label for="progressBar">Memory Usage:{{memoryUsage}}%</label>
-          <div class="progress-bar" id="progressBar"></div>
-        </div>
-        <div class="progress-bar-container">
-          <label for="progressBar">GPU Memory Usage:{{gpuMemoryUsage}}%</label>
-          <div class="{{getCpuClass cpuUsage}}" id="progressBar"></div>
-        </div>
-        {{/each}}
-      </div>
-  
-    <h2>Global Server Usage</h2>
-    <p>CPU Usage: {{serverStats.globalUsage.cpuUsage}}%</p>
-    <p>Memory Usage: {{serverStats.globalUsage.memoryUsage}}%</p>
-    <p>Disk Usage: {{serverStats.globalUsage.diskUsage}}%</p>
-    <p>Network Usage: {{serverStats.globalUsage.networkUsage}}%</p>
-    <p>GPU Usage: {{serverStats.globalUsage.gpuUsage}}%</p>
-  
+    <span>{{name}}</span>
+    <div class="progress-bar-container">
+      <label for="progressBar">CPU Usage:{{cpuUsage}}%</label>
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="progress-bar-container">
+      <label for="progressBar">Memory Usage:{{memoryUsage}}%</label>
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="progress-bar-container">
+      <label for="progressBar">GPU Memory Usage:{{gpuMemoryUsage}}%</label>
+      <div class="{{getCpuClass cpuUsage}}" id="progressBar"></div>
+    </div>
+    {{/each}}
+  </div>
+
+  <h2>Global Server Usage</h2>
+  <p>CPU Usage: {{serverStats.globalUsage.cpuUsage}}%</p>
+  <p>Memory Usage: {{serverStats.globalUsage.memoryUsage}}</p>
+  <p>Free Memory: {{serverStats.globalUsage.freeMemory}}</p>
+  <p>Total Memory: {{serverStats.globalUsage.totalMemory}}</p>
+  <p>Disk Usage: {{serverStats.globalUsage.diskUsage}}%</p>
+  <p>Network Usage: {{serverStats.globalUsage.networkUsage}}%</p>
+  <p>GPU Usage: {{serverStats.globalUsage.gpuUsage}}%</p>
+
 
   {{else}}
-    <p>Loading server stats...</p>
+  <p>Loading server stats...</p>
   {{/if}}
 </template>
